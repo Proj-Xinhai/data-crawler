@@ -39,4 +39,5 @@ def industry_index(start: str = '2018-02-21', end: str = '2023-01-18', output: s
     print(f'all industry_index data has been saved to {output}')
 
 if __name__ == '__main__':
-    industry_index(output='data/train/類股指')
+    industry_index(output='data/train/類股指') # train
+    industry_index(output='data/test/類股指', start='2023-01-30', end='2023-07-25') # test

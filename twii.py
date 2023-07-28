@@ -29,4 +29,5 @@ def twii(start: str = '2018-02-21', end: str = '2023-01-18', output: str = None)
     return data
 
 if __name__ == '__main__':
-    print(twii(output='data/train/twii.csv'))
+    print(twii(output='data/train/twii.csv')) # train
+    print(twii(output='data/test/twii.csv', start='2023-01-30', end='2023-07-25')) # test

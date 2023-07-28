@@ -64,4 +64,5 @@ def institutional_investors(start: str = '2018-02-21', end: str = '2023-01-18', 
     print(f'all institutional investors data has been saved to {output}')
 
 if __name__ == '__main__':
-    institutional_investors(output='data/train/法人買賣超日報')
+    institutional_investors(output='data/train/法人買賣超日報') # train
+    institutional_investors(output='data/test/法人買賣超日報', start='2023-01-30', end='2023-07-25') # test

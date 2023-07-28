@@ -35,4 +35,5 @@ def stock(ind: list, start: str = '2018-02-21', end: str = '2023-01-18', output:
     
 if __name__ == '__main__':
     ind = pd.read_csv('data/ind.csv')['代號'].to_list()
-    stock(ind=ind, output='data/train/個股')
+    stock(ind=ind, output='data/train/個股') # train
+    stock(ind=ind, output='data/test/個股', start='2023-01-30', end='2023-07-25') # test
