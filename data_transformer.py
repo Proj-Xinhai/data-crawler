@@ -5,17 +5,18 @@ import warnings
 import datetime
 import numpy as np
 
-def transformer(ind: list, dir: str = 'data/train/法人買賣超日報', output: str = 'data/train/法人買賣超日報_個股'):
-    '''
+
+def transformer(ind: list, source: str = 'data/train/法人買賣超日報', output: str = 'data/train/法人買賣超日報_個股'):
+    """
     Transform institutional investors data crawled by institutional_investors.py to the format that separated by stock code.
     Args:
         ind: list of stock index to transform
-        dir: the path of the institutional investors data (do not contain the file name like 'data/train/法人買賣超日報', the file names are the date)
+        source: the path of the institutional investors data (do not contain the file name like 'data/train/法人買賣超日報', the file names are the date)
         output: the path to save the data (do not contain the file name like 'data/train/法人買賣超日報_個股', the file names are the stock index)
     Returns:
         None
-    '''
-    if not os.path.exists(dir):
+    """
+    if not os.path.exists(source):
         raise ValueError('The input path is not exist!')
     
     if not os.path.exists(output):
@@ -23,11 +24,11 @@ def transformer(ind: list, dir: str = 'data/train/法人買賣超日報', output
         warnings.warn(f'Create one.', UserWarning)
         os.makedirs(output, exist_ok=True)
 
-    print(f'start to transform institutional investors data from {dir} to {output}...')
+    print(f'start to transform institutional investors data from {source} to {output}...')
     print(f'{len(ind)} stocks are going to transform')
 
-    for f in tqdm.tqdm(os.listdir(dir)):
-        temp = pd.read_csv(os.path.join(dir, f), index_col=0)
+    for f in tqdm.tqdm(os.listdir(source)):
+        temp = pd.read_csv(os.path.join(source, f), index_col=0)
         col = temp.drop(columns=['證券代號', '證券名稱']).columns.to_list()
         col.insert(0, 'Date')
         
@@ -40,7 +41,9 @@ def transformer(ind: list, dir: str = 'data/train/法人買賣超日報', output
                 out = pd.read_csv(os.path.join(output, str(item)+'.csv'), index_col=0)
 
             if item in temp['證券代號'].unique():
-                new_line = np.insert(temp[temp['證券代號'] == item].drop(columns=['證券代號', '證券名稱']).values[0], 0, d.strftime("%Y-%m-%d %H:%M:%S+08:00"), axis=0)
+                new_line = np.insert(temp[temp['證券代號'] == item]
+                                     .drop(columns=['證券代號', '證券名稱'])
+                                     .values[0], 0, d.strftime("%Y-%m-%d %H:%M:%S+08:00"), axis=0)
                 new_line = pd.DataFrame(new_line.reshape(1, -1), columns=col)
                 out = pd.concat([out, new_line], ignore_index=True)
             else:
@@ -52,7 +55,8 @@ def transformer(ind: list, dir: str = 'data/train/法人買賣超日報', output
 
     print(f'all institutional investors data has been transformed to {output}')
 
+
 if __name__ == '__main__':
-    ind = pd.read_csv('data/ind.csv')['代號'].to_list()
-    transformer(ind=ind) # train
-    transformer(ind=ind, dir='data/test/法人買賣超日報', output='data/test/法人買賣超日報_個股') # test
+    ind_list = pd.read_csv('data/ind.csv')['代號'].to_list()
+    transformer(ind=ind_list)  # train
+    transformer(ind=ind_list, source='data/test/法人買賣超日報', output='data/test/法人買賣超日報_個股')  # test
