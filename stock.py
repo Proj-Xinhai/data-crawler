@@ -1,18 +1,20 @@
-import yfinance as yf
 import pandas as pd
 import os
 import warnings
 import tqdm
+from time import sleep
+from FinMind.data import DataLoader
+from dotenv import dotenv_values
 
 
-def stock(ind: list, start: str = '2018-02-21', end: str = '2023-01-18', output: str = None) -> None:
+def stock(ind: list, start: str = '2018-02-21', end: str = '2023-10-27', output: str = None) -> None:
     """
-    Download stock data from list.
+    Download stock data in list.
     Args:
         ind: list of stock index
         start: start date of the data
-        end: end date of the data (d-1 is the last day of the data)
-        output: the path to save the data (do not contain the file name like 'data/train/個股', the file names are the stock index)
+        end: end date of the data
+        output: the path to save the data (do not contain the file name like 'data/個股', the file names are the stock index)
     Returns:
         None
     """
@@ -27,15 +29,35 @@ def stock(ind: list, start: str = '2018-02-21', end: str = '2023-01-18', output:
     print(f'start to download stock data from {start} to {end}...')
     print(f'{len(ind)} stocks are going to download')
 
+    dl = DataLoader()
+
+    config = dotenv_values('.env')
+    try:
+        token = config['FINMIND_TOKEN']
+        dl.login_by_token(token)
+    except KeyError:
+        print('Token is not specified, download data without login...')
+    except:
+        raise Exception('Cannot login by token, please check your token in .env file.')
+
     for item in tqdm.tqdm(ind):
-        api = yf.Ticker(str(item)+'.TW')
-        hist = api.history(start=start, end=end)
-        hist.to_csv(os.path.join(output, str(item)+'.csv'))
+        while True:
+            try:
+                data = dl.taiwan_stock_daily(
+                    stock_id=item,
+                    start_date=start,
+                    end_date=end
+                )
+
+                data.set_index('date').to_csv(os.path.join(output, str(item)+'.csv'))
+                break
+            except:
+                print(f'error occurs when downloading {item}, is\'s usually because of the limit of FinMind API, retry after 10 mins...')
+                sleep(10 * 60)  # sleep 10 mins
     
     print(f'all stock data has been saved to {output}')
 
 
 if __name__ == '__main__':
     ind_list = pd.read_csv('data/ind.csv')['代號'].to_list()
-    stock(ind=ind_list, output='data/train/個股')  # train
-    stock(ind=ind_list, output='data/test/個股', start='2023-01-30', end='2023-07-25')  # test
+    stock(ind=ind_list, output='data/個股')

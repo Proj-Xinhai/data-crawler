@@ -58,5 +58,6 @@ def transformer(ind: list, source: str = 'data/train/法人買賣超日報', out
 
 if __name__ == '__main__':
     ind_list = pd.read_csv('data/ind.csv')['代號'].to_list()
-    transformer(ind=ind_list)  # train
-    transformer(ind=ind_list, source='data/test/法人買賣超日報', output='data/test/法人買賣超日報_個股')  # test
+    # transformer(ind=ind_list)  # train
+    # transformer(ind=ind_list, source='data/test/法人買賣超日報', output='data/test/法人買賣超日報_個股')  # test
+    transformer(ind=ind_list, source='data/法人買賣超日報', output='data/法人買賣超日報_個股')  # all
