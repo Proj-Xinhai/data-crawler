@@ -58,5 +58,5 @@ def margin_purchase_short_sales(ind: list, start: str = '2018-02-21', end: str =
 
 
 if __name__ == '__main__':
-    ind_list = pd.read_csv('data/ind_new.csv')['代號'].to_list()[:500]
+    ind_list = pd.read_csv('data/ind_new.csv')['代號'].to_list()
     margin_purchase_short_sales(ind=ind_list, output='data/融資融券')
