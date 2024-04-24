@@ -43,13 +43,17 @@ def api(date: str, retry: int = 10, cold_down: int = 10) -> pd.DataFrame | None:
         return pd.DataFrame(data['data'], columns=data['fields'])
 
 
-def institutional_investors(start: str = '2018-02-21', end: str = '2023-01-18', output: str = None, cold_down: int = 10) -> None:
+def institutional_investors(start: str = '2018-02-21',
+                            end: str = '2023-01-18',
+                            output: str = None,
+                            cold_down: int = 10) -> None:
     """
     Download institutional investors data from TWSE.
     Args:
         start: start date of the data
         end: end date of the data (d-1 is the last day of the data)
-        output: the path to save the data (do not contain the file name like 'data/train/法人買賣超日報', the file names are the date)
+        output: the path to save the data (do not contain the file name like 'data/train/法人買賣超日報',
+                the file names are the date)
         cold_down: the time to wait between each download
     Returns:
         None
@@ -58,8 +62,8 @@ def institutional_investors(start: str = '2018-02-21', end: str = '2023-01-18', 
         raise ValueError('The output path is not specified!')
     
     if not os.path.exists(output):
-        warnings.warn(f'The destination folder is not exist!', UserWarning)
-        warnings.warn(f'Create one.', UserWarning)
+        warnings.warn('The destination folder is not exist!', UserWarning)
+        warnings.warn('Create one.', UserWarning)
         os.makedirs(output, exist_ok=True)
 
     print(f'start to download institutional investors data from {start} to {end}...')

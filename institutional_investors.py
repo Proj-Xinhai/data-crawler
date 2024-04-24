@@ -50,7 +50,8 @@ def institutional_investors(ind: list, start: str = '2018-02-21', end: str = '20
                 break
             except Exception:
                 print(
-                    f'error occurs when downloading {item}, is\'s usually because of the limit of FinMind API, retry after 10 mins...')
+                    f'error occurs when downloading {item},'
+                    ' is\'s usually because of the limit of FinMind API, retry after 10 mins...')
                 time.sleep(10 * 60)
 
     print(f'all institutional investors data has been saved to {output}')

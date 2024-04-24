@@ -15,8 +15,8 @@ def twii(start: str = '2018-02-21', end: str = '2023-01-18', output: str = None)
         data: the twii data
     """
     if output is not None and not os.path.exists(output):
-        warnings.warn(f'The destination folder is not exist!', UserWarning)
-        warnings.warn(f'Create one.', UserWarning)
+        warnings.warn('The destination folder is not exist!', UserWarning)
+        warnings.warn('Create one.', UserWarning)
         os.makedirs(os.path.dirname(output), exist_ok=True)
 
     print(f'start to download twii data from {start} to {end}...')

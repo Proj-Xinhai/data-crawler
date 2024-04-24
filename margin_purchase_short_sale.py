@@ -22,8 +22,8 @@ def margin_purchase_short_sales(ind: list, start: str = '2018-02-21', end: str =
         raise ValueError('The output path is not specified!')
 
     if not os.path.exists(output):
-        warnings.warn(f'The destination folder is not exist!', UserWarning)
-        warnings.warn(f'Create one.', UserWarning)
+        warnings.warn('The destination folder is not exist!', UserWarning)
+        warnings.warn('Create one.', UserWarning)
         os.makedirs(output, exist_ok=True)
 
     print(f'start to download stock data from {start} to {end}...')
@@ -37,8 +37,8 @@ def margin_purchase_short_sales(ind: list, start: str = '2018-02-21', end: str =
         dl.login_by_token(token)
     except KeyError:
         print('Token is not specified, download data without login...')
-    except:
-        raise Exception('Cannot login by token, please check your token in .env file.')
+    except Exception:
+        raise ValueError('Cannot login by token, please check your token in .env file.')
 
     for item in tqdm.tqdm(ind):
         while True:
@@ -49,9 +49,10 @@ def margin_purchase_short_sales(ind: list, start: str = '2018-02-21', end: str =
                     end_date=end
                 ).set_index('date').to_csv(os.path.join(output, str(item) + '.csv'))
                 break
-            except:
+            except Exception:
                 print(
-                    f'error occurs when downloading {item}, is\'s usually because of the limit of FinMind API, retry after 10 mins...')
+                    f'error occurs when downloading {item},'
+                    ' is\'s usually because of the limit of FinMind API, retry after 10 mins...')
                 sleep(10 * 60)  # sleep 10 mins
 
     print(f'all stock data has been saved to {output}')
