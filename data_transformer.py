@@ -20,8 +20,8 @@ def transformer(ind: list, source: str = 'data/train/法人買賣超日報', out
         raise ValueError('The input path is not exist!')
     
     if not os.path.exists(output):
-        warnings.warn(f'The destination folder is not exist!', UserWarning)
-        warnings.warn(f'Create one.', UserWarning)
+        warnings.warn('The destination folder is not exist!', UserWarning)
+        warnings.warn('Create one.', UserWarning)
         os.makedirs(output, exist_ok=True)
 
     print(f'start to transform institutional investors data from {source} to {output}...')
@@ -58,6 +58,6 @@ def transformer(ind: list, source: str = 'data/train/法人買賣超日報', out
 
 if __name__ == '__main__':
     ind_list = pd.read_csv('data/ind.csv')['代號'].to_list()
-    # transformer(ind=ind_list)  # train
-    # transformer(ind=ind_list, source='data/test/法人買賣超日報', output='data/test/法人買賣超日報_個股')  # test
+    # training data: ind=ind_list
+    # testing data: ind=ind_list, source='data/test/法人買賣超日報', output='data/test/法人買賣超日報_個股'
     transformer(ind=ind_list, source='data/法人買賣超日報', output='data/法人買賣超日報_個股')  # all

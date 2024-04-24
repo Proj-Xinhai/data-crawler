@@ -21,8 +21,8 @@ def institutional_investors(ind: list, start: str = '2018-02-21', end: str = '20
         raise ValueError('The output path is not specified!')
 
     if not os.path.exists(output):
-        warnings.warn(f'The destination folder is not exist!', UserWarning)
-        warnings.warn(f'Create one.', UserWarning)
+        warnings.warn('The destination folder is not exist!', UserWarning)
+        warnings.warn('Create one.', UserWarning)
         os.makedirs(output, exist_ok=True)
 
     print(f'start to download institutional investors data from {start} to {end}...')
@@ -36,7 +36,7 @@ def institutional_investors(ind: list, start: str = '2018-02-21', end: str = '20
         dl.login_by_token(token)
     except KeyError:
         print('Token is not specified, download data without login...')
-    except:
+    except Exception:
         raise Exception('Cannot login by token, please check your token in .env file.')
 
     for item in ind:
@@ -46,10 +46,11 @@ def institutional_investors(ind: list, start: str = '2018-02-21', end: str = '20
                     stock_id=item,
                     start_date=start,
                     end_date=end
-                ).set_index('date').to_csv(os.path.join(output, str(item)+'.csv'))
+                ).set_index('date').to_csv(os.path.join(output, str(item) + '.csv'))
                 break
-            except:
-                print(f'error occurs when downloading {item}, is\'s usually because of the limit of FinMind API, retry after 10 mins...')
+            except Exception:
+                print(
+                    f'error occurs when downloading {item}, is\'s usually because of the limit of FinMind API, retry after 10 mins...')
                 time.sleep(10 * 60)
 
     print(f'all institutional investors data has been saved to {output}')

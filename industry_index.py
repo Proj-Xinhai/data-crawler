@@ -18,8 +18,8 @@ def industry_index(start: str = '2018-02-21', end: str = '2023-01-18', output: s
         raise ValueError('The output path is not specified!')
     
     if not os.path.exists(output):
-        warnings.warn(f'The destination folder is not exist!', UserWarning)
-        warnings.warn(f'Create one.', UserWarning)
+        warnings.warn('The destination folder is not exist!', UserWarning)
+        warnings.warn('Create one.', UserWarning)
         os.makedirs(output, exist_ok=True)
 
     print(f'start to download industry_index data from {start} to {end}...')
